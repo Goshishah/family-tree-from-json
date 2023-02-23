@@ -1,26 +1,36 @@
 import "./styles.css";
-import data from "./data.json";
-import Xarrow from "react-xarrows";
-import { useRef } from "react";
-import { V2Example } from "./Example";
-const boxStyle = {
-  border: "grey solid 2px",
-  borderRadius: "10px",
-  padding: "10px",
-  margin: "50px"
-};
-export default function App() {
-  // const box1Ref = useRef(null);
-  //   return (
-  //       <div>
-  //           <div ref={box1Ref} style={boxStyle}>hey</div>
-  //           <p id="elem2" style={boxStyle}>hey2</p>
-  //           <Xarrow
-  //               start={box1Ref} //can be react ref
-  //               end="elem2" //or an id
-  //           />
-  //       </div>
-  //   );
+import { MyDocument, MyDocument1 } from "./MyDocument";
+import { MyTree } from "./MyTree";
+import { Document, Page, usePDF } from "@react-pdf/renderer";
 
-  return <V2Example />;
+export default function App() {
+  return (
+    <>
+      <Download />
+      <MyTree />
+    </>
+  );
 }
+
+const MyDoc = (
+  <Document>
+    <Page>// My document data</Page>
+  </Document>
+);
+
+const Download = () => {
+  // const [instance, updateInstance] = usePDF({ document: MyDocument });
+  const [instance, updateInstance] = usePDF({ document: MyDoc });
+
+  if (instance.loading) return <div>Loading ...</div>;
+
+  if (instance.error) return <div>Something went wrong: {error}</div>;
+
+  return (
+    <button>
+      <a href={instance.url} download="test.pdf">
+        Download
+      </a>
+    </button>
+  );
+};
